@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Scaler Socials</title>
+</head>
+<style>
+	.container {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-start;
+	}
+
+	body {
+		font-family: Arial, sans-serif;
+		margin: 0;
+		padding: 0;
+	}
+	#feed-heading {
+		position: fixed;
+
+	}
+
+
+	.navbar {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		/* background-color: #f2f2f2; */
+		background-color: white;
+		padding: 10px;
+	}
+
+	.logo {
+		width: 100px;
+		height: auto;
+	}
+
+	.left {
+		background-color: hsla(0, 18%, 96%, 0.894);
+	}
+
+	.image {
+		width: 200px;
+		height: auto;
+	}
+
+	.container {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		height: 100vh;
+	}
+
+	.left {
+		width: 50%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		height: 100vh;
+		flex: 1;
+		margin-right: 20px;
+	}
+
+	.right {
+		width: 50%;
+		display: flex;
+		flex-direction: column;
+		height: 100vh;
+		flex: 1;
+	}
+
+	#post-content {
+		border: none;
+		background-color: white;
+		resize: none;
+
+
+	}
+
+	.post-btn {
+		border: none;
+		padding: 5px 7.5px;
+		border-radius: 8px;
+		background-color: rgb(58, 203, 255);
+		color: white;
+		font-size: 20px;
+	}
+
+	.post-btn:hover {
+		border: none;
+		padding: 5px 7.5px;
+		border-radius: 8px;
+		background-color: rgb(46, 167, 211);
+		color: white;
+		cursor: pointer;
+		transition: 0.1s ease-in;
+		font-size: 25px;
+	}
+
+
+
+	.post {
+		border: 2px solid #ccc;
+		border-radius: 8px;
+		padding: 10px;
+		margin-bottom: 10px;
+		background-color: #8e8dff81;
+		max-width: 300px;
+		position: relative;
+	}
+
+	.action-icons {
+		margin: 5px;
+	}
+
+	.post p {
+		margin: 0;
+
+	}
+
+	.actions {
+		display: flex;
+		align-items: center;
+		margin-top: 10px;
+	}
+
+	.post-text {
+		margin-bottom: 10px;
+	}
+
+	.delete-btn {
+		padding: 5px 7.5px;
+		font-size: 16px;
+		margin-top: 5px;
+		cursor: pointer;
+		position: absolute;
+		top: 5px;
+		right: 5px;
+	}
+
+	.delete-btn:hover {
+		background-image: url("delete-color-filled.png");
+		background-size: cover;
+		transition: 0.1s ease-in;
+	}
+
+	/* Modal styles */
+	.modal {
+		display: none;
+		position: fixed;
+		z-index: 1;
+		left: 0;
+		top: 0;
+		width: 100%;
+		height: 100%;
+		overflow: auto;
+		background-color: rgba(0, 0, 0, 0.4);
+	}
+
+	.modal-content {
+		background-color: #fefefe;
+		margin: 15% auto;
+		padding: 20px;
+		border: 1px solid #888;
+		width: 40%;
+	}
+
+	.modal-buttons {
+		display: flex;
+		justify-content: flex-end;
+		margin-top: 20px;
+	}
+
+	.modal-buttons button {
+		margin-left: 10px;
+		padding: 5px 10px;
+		border-radius: 4px;
+		cursor: pointer;
+	}
+
+	.modal-buttons button.primary {
+		background-color: rgb(255, 58, 58);
+		color: white;
+	}
+
+	.modal-buttons button.secondary {
+		background-color: #ccc;
+		color: black;
+	}
+
+	/* New styles for like image */
+	.action-icons.heart:hover {
+		content: url("state_clicked.png");
+	}
+
+	.action-icons.heart.clicked {
+		content: url("state_clicked.png");
+	}
+</style>
+
+<body>
+	<nav class="navbar">
+		<img src="SST Logo.png" alt="Logo" class="logo">
+		<img src="scaler-social.png" alt="Image" class="image">
+	</nav>
+	<div class="container">
+		<div class="left">
+			<h4>Post Your thoughts here</h4>
+			<br>
+			<div class="post-box">
+				<img src="profile_image.png" alt="profile-pic">
+				<textarea name="post-content" id="post-content" cols="30" rows="10"></textarea>
+				<button class="post-btn" onclick="addPost()">Post</button>
+			</div>
+		</div>
+		<div class="right" id="feed-post">
+			<h3 id="feed-heading">Your Feed</h3>
+			<br><br><br>
+			<div class="post">
+				<img src="profile_image.png" alt="profile-pic">
+				<p id="username">Username</p>
+				<p id="userId">User Id</p>
+				<br>
+				<p class="post-text">Hey, I am new here</p>
+				<div class="actions">
+					<img src="heart.png" alt="" class="action-icons heart" onmouseover="changeToFilledHeart(this)" onmouseout="changeToOriginalHeart(this)" onclick="toggleRedHeart(this)">
+					<img src="comment.png" alt="" class="action-icons comment" onclick="addComment(this)">
+					<img src="delete.png" alt="" class="delete-btn" onclick="showDeleteConfirmation(this)">
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="deleteModal" class="modal">
+		<div class="modal-content">
+			<p>Are you sure you want to delete this post?</p>
+			<div class="modal-buttons">
+				<button class="secondary" onclick="hideDeleteConfirmation()">Cancel</button>
+				<button class="primary" onclick="deletePost()">Delete</button>
+			</div>
+		</div>
+	</div>
+	<script>
+		function addPost() {
+			var postContent = document.getElementById("post-content").value;
+			var feedPost = document.getElementById("feed-post");
+
+			var newPost = document.createElement("div");
+			newPost.className = "post";
+			newPost.innerHTML = `
+                <img src="profile_image.png" alt="profile-pic">
+                <p id="username">Username</p>
+                <p id="userId">User Id</p>
+                <br>
+                <p class="post-text">${postContent}</p>
+                <div class="actions">
+                    <img src="heart.png" alt="" class="action-icons heart" onmouseover="changeToFilledHeart(this)" onmouseout="changeToOriginalHeart(this)" onclick="toggleRedHeart(this)">
+                    <img src="comment.png" alt="" class="action-icons comment" onclick="addComment(this)">
+                    <img src="delete.png" alt="" class="delete-btn" onclick="showDeleteConfirmation(this)">
+                </div>
+            `;
+
+			// Insert the new post at the beginning of the feedPost element
+			feedPost.insertBefore(newPost, feedPost.firstChild);
+		}
+
+		function addComment(commentButton) {
+			var postContent = document.getElementById("post-content").value;
+			var parentPost = commentButton.parentNode.parentNode;
+			var commentText = parentPost.querySelector(".post-text").textContent;
+
+			var newComment = document.createElement("div");
+			newComment.className = "post";
+			newComment.innerHTML = `
+                <img src="profile_image.png" alt="profile-pic">
+                <p id="username">Username</p>
+                <p id="userId">User Id</p>
+                <br>
+                <p class="post-text">${postContent}</p>
+                <div class="actions">
+                    <img src="heart.png" alt="" class="action-icons heart" onmouseover="changeToFilledHeart(this)" onmouseout="changeToOriginalHeart(this)" onclick="toggleRedHeart(this)">
+                    <img src="comment.png" alt="" class="action-icons comment" onclick="addComment(this)">
+                    <img src="delete.png" alt="" class="delete-btn" onclick="showDeleteConfirmation(this)">
+                </div>
+            `;
+
+			// Insert the new comment after the parent post
+			parentPost.parentNode.insertBefore(newComment, parentPost.nextSibling);
+		}
+
+		function showDeleteConfirmation(image) {
+			var modal = document.getElementById("deleteModal");
+			modal.style.display = "block";
+			// Store the reference to the post element in the modal
+			modal.postElement = image.parentNode.parentNode;
+		}
+
+		function hideDeleteConfirmation() {
+			var modal = document.getElementById("deleteModal");
+			modal.style.display = "none";
+			// Clear the reference to the post element in the modal
+			modal.postElement = null;
+		}
+
+		function deletePost() {
+			var modal = document.getElementById("deleteModal");
+			var post = modal.postElement;
+			post.remove();
+			hideDeleteConfirmation();
+		}
+
+		function changeToFilledHeart(image) {
+			image.src = "state_clicked.png";
+		}
+
+		function changeToOriginalHeart(image) {
+			image.src = "heart.png";
+		}
+
+		function toggleRedHeart(image) {
+			image.classList.toggle("clicked");
+		}
+
+		document.getElementById("post-content").addEventListener("keydown", function (event) {
+			if (event.keyCode === 13) {
+				event.preventDefault();
+				addPost();
+			}
+		});
+
+	</script>
+</body>
+

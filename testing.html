@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Awesome Socials</title>
+</head>
+<style>
+    .main-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    #feed-heading {
+        position: fixed;
+    }
+
+    .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #4CAF50;
+        padding: 10px;
+    }
+
+    .logo {
+        width: 100px;
+        height: auto;
+    }
+
+    .left-container {
+        background-color: hsla(0, 18%, 96%, 0.894);
+        width: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        flex: 1;
+        margin-right: 20px;
+    }
+
+    .image {
+        width: 200px;
+        height: auto;
+    }
+
+    .post-box {
+        border: 2px solid #ccc;
+        border-radius: 8px;
+        padding: 15px;
+        max-width: 300px;
+    }
+
+    #post-content {
+        border: none;
+        background-color: white;
+        resize: none;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .post-btn {
+        border: none;
+        padding: 10px;
+        border-radius: 8px;
+        background-color: #2196F3;
+        color: white;
+        font-size: 18px;
+        cursor: pointer;
+    }
+
+    .post-btn:hover {
+        background-color: #0b7dda;
+        transition: 0.1s ease-in;
+        font-size: 20px;
+    }
+
+    .right-container {
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        flex: 1;
+    }
+
+    .post {
+        border: 2px solid #ccc;
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 20px;
+        background-color: #8e8dff81;
+        max-width: 400px;
+        position: relative;
+    }
+
+    .action-icons {
+        margin: 5px;
+    }
+
+    .post p {
+        margin: 0;
+    }
+
+    .actions {
+        display: flex;
+        align-items: center;
+        margin-top: 10px;
+    }
+
+    .post-text {
+        margin-bottom: 10px;
+    }
+
+    .delete-btn {
+        padding: 10px;
+        font-size: 16px;
+        margin-top: 5px;
+        cursor: pointer;
+        position: absolute;
+        top: 5px;
+        right: 5px;
+    }
+
+    .delete-btn:hover {
+        background-color: #ff3333;
+        transition: 0.1s ease-in;
+    }
+
+    /* Modal styles */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 40%;
+    }
+
+    .modal-buttons {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 20px;
+    }
+
+    .modal-buttons button {
+        margin-left: 10px;
+        padding: 5px 10px;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .modal-buttons button.primary {
+        background-color: #ff3333;
+        color: white;
+    }
+
+    .modal-buttons button.secondary {
+        background-color: #ccc;
+        color: black;
+    }
+
+    /* New styles for like image */
+    .action-icons.heart:hover {
+        content: url("state_clicked.png");
+    }
+
+    .action-icons.heart.clicked {
+        content: url("state_clicked.png");
+    }
+</style>
+
+<body>
+    <nav class="navbar">
+        <img src="AwesomeLogo.png" alt="Logo" class="logo">
+        <img src="awesome-social.png" alt="Image" class="image">
+    </nav>
+    <div class="main-container">
+        <div class="left-container">
+            <h4>Share Your Awesome Thoughts!</h4>
+            <div class="post-box">
+                <img src="profile_image.png" alt="profile-pic">
+                <textarea name="post-content" id="post-content" cols="30" rows="10"></textarea>
+                <button class="post-btn" onclick="addPost()">Share</button>
+            </div>
+        </div>
+        <div class="right-container" id="feed-post">
+            <h3 id="feed-heading">Your Awesome Feed</h3>
+            <div class="post">
+                <img src="profile_image.png" alt="profile-pic">
+                <p id="username">AwesomeUser</p>
+                <p id="userId">User#123</p>
+                <p class="post-text">Hey, I'm having an awesome time here!</p>
+                <div class="actions">
+                    <img src="heart.png" alt="" class="action-icons heart" onmouseover="changeToFilledHeart(this)" onmouseout="changeToOriginalHeart(this)" onclick="toggleRedHeart(this)">
+                    <img src="comment.png" alt="" class="action-icons comment" onclick="addComment(this)">
+                    <img src="delete.png" alt="" class="delete-btn" onclick="showDeleteConfirmation(this)">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <p>Are you sure you want to delete this awesome post?</p>
+            <div class="modal-buttons">
+                <button class="secondary" onclick="hideDeleteConfirmation()">Cancel</button>
+                <button class="primary" onclick="deletePost()">Delete</button>
+            </div>
+        </div>
+    </div>
+	 <script>
+		function addPost() {
+			var postContent = document.getElementById("post-content").value;
+			var feedPost = document.getElementById("feed-post");
+
+			var newPost = document.createElement("div");
+			newPost.className = "post";
+			newPost.innerHTML = `
+                <img src="profile_image.png" alt="profile-pic">
+                <p id="username">Username</p>
+                <p id="userId">User Id</p>
+                <br>
+                <p class="post-text">${postContent}</p>
+                <div class="actions">
+                    <img src="heart.png" alt="" class="action-icons heart" onmouseover="changeToFilledHeart(this)" onmouseout="changeToOriginalHeart(this)" onclick="toggleRedHeart(this)">
+                    <img src="comment.png" alt="" class="action-icons comment" onclick="addComment(this)">
+                    <img src="delete.png" alt="" class="delete-btn" onclick="showDeleteConfirmation(this)">
+                </div>
+            `;
+
+			// Insert the new post at the beginning of the feedPost element
+			feedPost.insertBefore(newPost, feedPost.firstChild);
+		}
+
+		function addComment(commentButton) {
+			var postContent = document.getElementById("post-content").value;
+			var parentPost = commentButton.parentNode.parentNode;
+			var commentText = parentPost.querySelector(".post-text").textContent;
+
+			var newComment = document.createElement("div");
+			newComment.className = "post";
+			newComment.innerHTML = `
+                <img src="profile_image.png" alt="profile-pic">
+                <p id="username">Username</p>
+                <p id="userId">User Id</p>
+                <br>
+                <p class="post-text">${postContent}</p>
+                <div class="actions">
+                    <img src="heart.png" alt="" class="action-icons heart" onmouseover="changeToFilledHeart(this)" onmouseout="changeToOriginalHeart(this)" onclick="toggleRedHeart(this)">
+                    <img src="comment.png" alt="" class="action-icons comment" onclick="addComment(this)">
+                    <img src="delete.png" alt="" class="delete-btn" onclick="showDeleteConfirmation(this)">
+                </div>
+            `;
+
+			// Insert the new comment after the parent post
+			parentPost.parentNode.insertBefore(newComment, parentPost.nextSibling);
+		}
+
+		function showDeleteConfirmation(image) {
+			var modal = document.getElementById("deleteModal");
+			modal.style.display = "block";
+			// Store the reference to the post element in the modal
+			modal.postElement = image.parentNode.parentNode;
+		}
+
+		function hideDeleteConfirmation() {
+			var modal = document.getElementById("deleteModal");
+			modal.style.display = "none";
+			// Clear the reference to the post element in the modal
+			modal.postElement = null;
+		}
+
+		function deletePost() {
+			var modal = document.getElementById("deleteModal");
+			var post = modal.postElement;
+			post.remove();
+			hideDeleteConfirmation();
+		}
+
+		function changeToFilledHeart(image) {
+			image.src = "state_clicked.png";
+		}
+
+		function changeToOriginalHeart(image) {
+			image.src = "heart.png";
+		}
+
+		function toggleRedHeart(image) {
+			image.classList.toggle("clicked");
+		}
+
+		document.getElementById("post-content").addEventListener("keydown", function (event) {
+			if (event.keyCode === 13) {
+				event.preventDefault();
+				addPost();
+			}
+		});
+
+	</script>
+</body>
